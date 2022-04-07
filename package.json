@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "server": "json-server -p3001 --watch db.json"
   },
   "dependencies": {
     "next": "latest",
