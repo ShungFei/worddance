@@ -1,8 +1,8 @@
-export default function Submission({ content }) {
+export default function Submission({ submission }) {
 
 
 
     return (
-        <li>{content}</li>
+        <div className="submission-item">{submission.content}</div>
     )
 }

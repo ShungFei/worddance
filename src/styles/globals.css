@@ -1,0 +1,135 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-color: #ffffff;
+  --bg-accent: hsl(41, 83%, 86%);
+  --text-color: #000000;
+  --border: 0px solid #4c4c4c;
+  --border-radius-panel: 16px;
+  --border-radius-item: 8px;
+}
+
+body {
+  margin: 0;
+  background: #ffffff;
+  font-family: Helvetica, sans-serif;
+  font-size: 24px;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 3fr 30ch 3fr;
+  grid-template-rows: auto 5rem;
+  grid-template-areas:
+    "submissions words right"
+    "input       input input";
+  gap: 3vh 5vw;
+  margin: 5vh 3vw;
+  width: 94vw;
+  height: 90vh;
+}
+
+/* Submission stack */
+.submission-stack {
+  grid-area: submissions;
+  background-color: var(--bg-accent);
+  border: var(--border);
+  border-radius: var(--border-radius-panel);
+  padding: 1rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.submission-item {
+  background-color: var(--bg-color);
+  margin-top: 0.6rem;
+  border-radius: var(--border-radius-item);
+  padding: 0.5rem;
+  border: var(--border);
+  color: var(--text-color);
+}
+
+span.awaiting-token {
+  background-color: var(--text-color);
+}
+
+span.correct-token {
+  background-color: #cbf8d4;
+}
+
+span.incorrect-token {
+  background-color: #f8b9b9;
+}
+
+/* Word stack */
+.word-stack {
+  grid-area: words;
+  background-color: var(--bg-accent);
+  border: var(--border);
+  border-radius: var(--border-radius-panel);
+  padding: 1rem;
+  overflow: auto;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.word-stack-item {
+  background-color: var(--bg-color);
+  display: flex;
+  align-items: center;
+  margin-top: 0.6rem;
+  border-radius: var(--border-radius-item);
+  padding: 0.5rem;
+  border: var(--border);
+  color: var(--text-color);
+}
+
+.word-timer-wrapper  {
+  margin-left: auto;
+  margin-right: 0.4rem;
+}
+
+.word-timer-value {
+  color: rgb(0, 0, 0);
+  font-weight: bold;
+}
+
+/* Right side panel */
+.right-panel {
+  grid-area: right;
+  background-color: var(--bg-accent);
+  border: var(--border);
+  border-radius: var(--border-radius-panel);
+  padding: 1rem;
+  overflow: auto;
+}
+
+/* Input form */
+.form {
+  grid-area: input;
+  font-size: 2rem;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.text-area {
+  outline: none;
+  border: none;
+  width: 100%;
+  height: calc(100%);
+  font-size: inherit;
+  background-color: #f5f7ff;
+  color: #343434;
+  text-align: center;
+}
+
+.text-area:focus {
+  
+  border: 2px solid rgb(63, 183, 183);
+}
