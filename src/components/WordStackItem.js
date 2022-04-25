@@ -1,17 +1,14 @@
-import { CountdownCircleTimer } from "react-countdown-circle-timer";
+import {CountdownCircleTimer} from "react-countdown-circle-timer"
 
-const renderTime = ({ remainingTime }) => {
+const renderTime = ({remainingTime}) => {
   // if (remainingTime === 0) {
   //   return <div className="timer">Too late!</div>
   // }
 
-  return (
-    <p className="word-timer-value">{remainingTime}</p>
-  )
+  return <p className="word-timer-value">{remainingTime}</p>
 }
 
-export default function WordStackItem({ id, targetWord, onWordExpiry }) {
-
+export default function WordStackItem({id, targetWord, onWordExpiry}) {
   const onComplete = () => {
     onWordExpiry(id)
   }
