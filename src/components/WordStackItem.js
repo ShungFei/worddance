@@ -23,10 +23,10 @@ export default function WordStackItem({ id, targetWord, onWordExpiry }) {
         <CountdownCircleTimer
           isPlaying
           duration={30}
-          colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
-          colorsTime={[10, 6, 3, 0]}
-          strokeWidth={16}
-          trailColor="white"
+          colors={["#5fff65", "#a3daff", "#ffe9a7", "#ff7272"]}
+          colorsTime={[30, 6, 3, 0]}
+          strokeWidth={9}
+          trailColor="var(--bg)"
           size={32}
           onComplete={onComplete}
           strokeLinecap="butt"

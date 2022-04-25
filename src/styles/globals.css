@@ -5,18 +5,28 @@
 }
 
 :root {
-  --bg-color: #ffffff;
-  --bg-accent: hsl(41, 83%, 86%);
-  --text-color: #000000;
+  --bg: hsl(0, 0%, 17%);
+  --bg-panel: hsl(0, 0%, 17%);
+  --bg-item: hsl(0, 0%, 34%);
+  --accent: hsl(283, 47%, 50%);
+  --text-color: hsl(0, 0%, 88%);
+  --correct-color: hsl(131, 60%, 40%);
+  --incorrect-color: hsl(0, 59%, 52%);
   --border: 0px solid #4c4c4c;
   --border-radius-panel: 16px;
   --border-radius-item: 8px;
+
+  /* These are just here for IDE color picking, the component needs to be manually updated currently */
+  --countdown-1: #a1d9ff;
+  --countdown-2: #a3daff;
+  --countdown-3: #ffe9a7;
+  --countdown-4: #ff7272;
 }
 
 body {
   margin: 0;
-  background: #ffffff;
-  font-family: Helvetica, sans-serif;
+  background: var(--bg);
+  font-family: "Open Sans", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 24px;
 }
 
@@ -25,9 +35,9 @@ body {
   grid-template-columns: 3fr 30ch 3fr;
   grid-template-rows: auto 5rem;
   grid-template-areas:
-    "submissions words right"
-    "input       input input";
-  gap: 3vh 5vw;
+    "left  words submissions"
+    "input input input";
+  gap: 10vh 5vw;
   margin: 5vh 3vw;
   width: 94vw;
   height: 90vh;
@@ -36,7 +46,7 @@ body {
 /* Submission stack */
 .submission-stack {
   grid-area: submissions;
-  background-color: var(--bg-accent);
+  background-color: var(--bg-panel);
   border: var(--border);
   border-radius: var(--border-radius-panel);
   padding: 1rem;
@@ -47,7 +57,7 @@ body {
 }
 
 .submission-item {
-  background-color: var(--bg-color);
+  background-color: var(--bg-item);
   margin-top: 0.6rem;
   border-radius: var(--border-radius-item);
   padding: 0.5rem;
@@ -57,40 +67,43 @@ body {
 
 span.awaiting-token {
   background-color: var(--text-color);
+  border-radius: 0.2rem;
 }
 
 span.correct-token {
-  background-color: #cbf8d4;
+  background-color: var(--correct-color);
+  border-radius: 0.2rem;
 }
 
 span.incorrect-token {
-  background-color: #f8b9b9;
+  background-color: var(--incorrect-color);
+  border-radius: 0.2rem;
 }
 
 /* Word stack */
 .word-stack {
   grid-area: words;
-  background-color: var(--bg-accent);
+  background-color: var(--bg-panel);
   border: var(--border);
-  border-radius: var(--border-radius-panel);
-  padding: 1rem;
   overflow: auto;
   display: flex;
   flex-direction: column-reverse;
+  /* justify-content: center; */
 }
 
 .word-stack-item {
-  background-color: var(--bg-color);
+  background-color: var(--bg-item);
   display: flex;
   align-items: center;
-  margin-top: 0.6rem;
-  border-radius: var(--border-radius-item);
   padding: 0.5rem;
-  border: var(--border);
   color: var(--text-color);
 }
 
-.word-timer-wrapper  {
+.word-stack-item+.word-stack-item {
+  border-bottom: 2px solid var(--text-color);
+}
+
+.word-timer-wrapper {
   margin-left: auto;
   margin-right: 0.4rem;
 }
@@ -100,14 +113,15 @@ span.incorrect-token {
   font-weight: bold;
 }
 
-/* Right side panel */
-.right-panel {
-  grid-area: right;
-  background-color: var(--bg-accent);
+/* Left side panel */
+.left-panel {
+  grid-area: left;
+  background-color: var(--bg-panel);
   border: var(--border);
   border-radius: var(--border-radius-panel);
   padding: 1rem;
   overflow: auto;
+  color: var(--text-color);
 }
 
 /* Input form */
@@ -124,12 +138,11 @@ span.incorrect-token {
   width: 100%;
   height: calc(100%);
   font-size: inherit;
-  background-color: #f5f7ff;
-  color: #343434;
+  background-color: var(--bg-item);
+  color: var(--text-color);
   text-align: center;
 }
 
 .text-area:focus {
-  
-  border: 2px solid rgb(63, 183, 183);
+  border: 2px solid var(--accent);
 }

@@ -111,10 +111,11 @@ export default function IndexPage() {
 
     <div>
       <div className="container">
-        <div className="submission-stack">
-          {userSubmissions.map(submission =>
-            <Submission key={submission.id} submission={submission} />
-          )}
+        <div className="left-panel">
+          <p>Score: {score}</p>
+          <p>Try to make the machine learning model fill in [MASK] with the words on the left</p>
+          <p>If one of the words is within its 5 best guesses your score will increase from 1 to 5 points depending on its ranking</p>
+          <p>Give me a good show - dance with your words!</p>
         </div>
 
         <div className="word-stack">
@@ -123,11 +124,10 @@ export default function IndexPage() {
           )}
         </div>
 
-        <div className="right-panel">
-          <p>Score: {score}</p>
-          <p>Try to make the machine learning model fill in [MASK] with the words on the left</p>
-          <p>If one of the words is within its 5 best guesses your score will increase from 1 to 5 points depending on its ranking</p>
-          <p>Give me a good show - dance with your words!</p>
+        <div className="submission-stack">
+          {userSubmissions.map(submission =>
+            <Submission key={submission.id} submission={submission} />
+          )}
         </div>
         <InputForm onSubmit={userSubmitted} onChange={handleInputChange} value={newSubmission} />
       </div>
