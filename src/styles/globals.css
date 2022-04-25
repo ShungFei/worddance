@@ -4,6 +4,15 @@
   box-sizing: border-box;
 }
 
+body,
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+}
+
 :root {
   --bg: hsl(0, 0%, 17%);
   --bg-panel: hsl(0, 0%, 17%);
@@ -13,8 +22,8 @@
   --correct-color: hsl(131, 60%, 40%);
   --incorrect-color: hsl(0, 59%, 52%);
   --border: 0px solid #4c4c4c;
-  --border-radius-panel: 16px;
-  --border-radius-item: 8px;
+  --border-radius-panel: 1rem;
+  --border-radius-item: 0.5rem;
 
   /* These are just here for IDE color picking, the component needs to be manually updated currently */
   --countdown-1: #a1d9ff;
@@ -24,7 +33,6 @@
 }
 
 body {
-  margin: 0;
   background: var(--bg);
   font-family: "Open Sans", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 24px;
@@ -145,4 +153,26 @@ span.incorrect-token {
 
 .text-area:focus {
   border: 2px solid var(--accent);
+}
+
+/* Tutorial modal */
+.tutorial-modal {
+  border: none;
+  padding: 0;
+  width: 50ch;
+  border-radius: var(--border-radius-panel);
+}
+
+.tutorial-modal::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.tutorial-modal-wrapper {
+  padding: 1rem;
+  background-color: var(--bg-item);
+  color: var(--text-color);
+}
+
+.tutorial-modal-wrapper p {
+  margin-top: 0.5rem;
 }

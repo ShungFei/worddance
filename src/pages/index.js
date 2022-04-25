@@ -1,5 +1,6 @@
 import {useState, useEffect} from "react"
 import InputForm from "../components/InputForm"
+import TutorialModal from "../components/TutorialModal"
 import Submission from "../components/Submission"
 import WordStackItem from "../components/WordStackItem"
 import vocab from "../lib/vocab"
@@ -127,12 +128,6 @@ export default function IndexPage() {
       <div className="container">
         <div className="left-panel">
           <p>Score: {score}</p>
-          <p>Try to make the machine learning model fill in [MASK] with the words on the left</p>
-          <p>
-            If one of the words is within its 5 best guesses your score will increase from 1 to 5 points depending on
-            its ranking
-          </p>
-          <p>Give me a good show - dance with your words!</p>
         </div>
 
         <div className="word-stack">
@@ -151,7 +146,10 @@ export default function IndexPage() {
             <Submission key={submission.id} submission={submission} />
           ))}
         </div>
+
         <InputForm onSubmit={userSubmitted} onChange={handleInputChange} value={newSubmission} />
+
+        <TutorialModal />
       </div>
     </div>
   )
