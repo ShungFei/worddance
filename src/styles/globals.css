@@ -14,9 +14,10 @@ p {
 }
 
 :root {
-  --bg: hsl(0, 0%, 17%);
-  --bg-panel: hsl(0, 0%, 17%);
-  --bg-item: hsl(0, 0%, 34%);
+  --bg: hsl(0, 0%, 11%);
+  --bg-panel: hsl(0, 0%, 11%);
+  --bg-item: hsl(0, 0%, 17%);
+  --bg-light: hsl(0, 0%, 34%);
   --accent: hsl(283, 47%, 50%);
   --text-color: hsl(0, 0%, 88%);
   --correct-color: hsl(131, 60%, 40%);
@@ -57,7 +58,6 @@ body {
   background-color: var(--bg-panel);
   border: var(--border);
   border-radius: var(--border-radius-panel);
-  padding: 1rem;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -96,7 +96,6 @@ span.incorrect-token {
   overflow: auto;
   display: flex;
   flex-direction: column-reverse;
-  /* justify-content: center; */
 }
 
 .word-stack-item {
@@ -130,6 +129,10 @@ span.incorrect-token {
   padding: 1rem;
   overflow: auto;
   color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Input form */
@@ -153,6 +156,7 @@ span.incorrect-token {
 
 .text-area:focus {
   border: 2px solid var(--accent);
+  /* background-color: var(--bg-light); */
 }
 
 /* Tutorial modal */
