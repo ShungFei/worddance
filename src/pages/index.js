@@ -29,26 +29,26 @@ export default function IndexPage() {
   const [timerKey, setTimerKey] = useState(0)
   const [timerDuration, setTimerDuration] = useState(maximumTime)
   const [startDate, setStartDate] = useState(Date.now)
-  const [targetWords, setTargetWords] = useState([{id: vocab.indexOf("capital"), word: "capital"}])
+  const [targets, setTargets] = useState([{id: vocab.indexOf("capital"), word: "capital"}])
   const [userSubmissions, setUserSubmissions] = useState([])
   const [newSubmission, setNewSubmission] = useState(`Paris is the ${mask_token} of France.`)
 
-  const addRandomTargetWord = () => {
-    const wordsInPlay = targetWords.map((targetWord) => targetWord.word)
+  const addRandomTarget = () => {
+    const wordsInPlay = targets.map((target) => target.word)
     const vocabNotInPlay = vocab.filter((word) => !wordsInPlay.includes(word))
     if (vocabNotInPlay.length > 0) {
       const randomIndex = Math.floor(Math.random() * vocabNotInPlay.length)
       const randomWord = vocabNotInPlay[randomIndex]
-      let newTargetWord = {
+      let newTarget = {
         id: vocab.indexOf(randomWord),
         word: randomWord,
       }
-      setTargetWords((targetWords) => targetWords.concat(newTargetWord))
+      setTargets((target) => target.concat(newTarget))
     }
   }
 
   useEffect(() => {
-    interval = setInterval(() => addRandomTargetWord(), 5000)
+    interval = setInterval(() => addRandomTarget(), 5000)
   }, [])
 
   const restartGame = () => {
@@ -56,7 +56,7 @@ export default function IndexPage() {
     setCorrectAnswers(0)
     setScore(0)
     setTimerDuration(maximumTime)
-    setTargetWords([])
+    setTargets([])
   }
 
   const gameOver = () => {
@@ -103,26 +103,26 @@ export default function IndexPage() {
     query({inputs: newSubmission}).then((response) => {
       // console.log(JSON.stringify(response))
       const topFiveTokens = response.map((element) => element.token_str)
-      const targetWordIndices = targetWords.map((targetWord) => topFiveTokens.indexOf(targetWord.word))
-      const maxIndex = Math.max(...targetWordIndices)
+      const targetIndices = targets.map((target) => topFiveTokens.indexOf(target.word))
+      const maxIndex = Math.max(...targetIndices)
       // console.log(token_strings)
-      // console.log(targetWordIndices)
+      // console.log(targetIndices)
       // console.log(maxIndex)
 
-      // All targetWordIndices elements are -1 if no target word is within the top 5 machine guesses
+      // All targetIndices elements are -1 if no target word is within the top 5 machine guesses
       if (maxIndex >= 0) {
-        const bestScoringTargetWordIndex = targetWordIndices.indexOf(maxIndex)
-        const bestScoringTargetWord = targetWords[bestScoringTargetWordIndex]
+        const bestScoringTargetIndex = targetIndices.indexOf(maxIndex)
+        const bestScoringTarget = targets[bestScoringTargetIndex]
         submissionObject.content = (
           <>
             {newSubmission.slice(0, token_index)}
-            <span className="correct-token">{bestScoringTargetWord.word}</span>
+            <span className="correct-token">{bestScoringTarget.word}</span>
             {newSubmission.slice(token_index + mask_token.length)}
           </>
         )
-        const scoreEarned = Math.ceil(500 + 500 * response[topFiveTokens.indexOf(bestScoringTargetWord.word)].score)
+        const scoreEarned = Math.ceil(500 + 500 * response[topFiveTokens.indexOf(bestScoringTarget.word)].score)
         setScore((previousScore) => previousScore + scoreEarned)
-        setTargetWords((targetWords) => targetWords.filter((targetWord) => targetWord.id != bestScoringTargetWord.id))
+        setTargets((target) => target.filter((target) => target.id != bestScoringTarget.id))
         addBonusTime()
       } else {
         submissionObject.content = (
@@ -140,7 +140,7 @@ export default function IndexPage() {
   }
 
   const handleWordExpiry = (id) => {
-    setTargetWords((targetWords) => targetWords.filter((word) => word.id != id))
+    setTargets((target) => target.filter((target) => target.id != id))
   }
 
   const handleInputChange = (event) => {
@@ -199,11 +199,11 @@ export default function IndexPage() {
         </div>
 
         <div className="word-stack">
-          {[...targetWords].reverse().map((targetWord) => (
+          {[...targets].reverse().map((target) => (
             <WordStackItem
-              key={targetWord.id}
-              id={targetWord.id}
-              targetWord={targetWord.word}
+              key={target.id}
+              id={target.id}
+              targetWord={target.word}
               onWordExpiry={handleWordExpiry}
               isGameOver={isGameOver}
             />
