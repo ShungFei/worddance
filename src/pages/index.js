@@ -102,13 +102,14 @@ export default function IndexPage() {
 
     query({inputs: newSubmission}).then((response) => {
       // console.log(JSON.stringify(response))
-      const token_strings = response.map((element) => element.token_str)
-      const targetWordIndices = targetWords.map((targetWord) => token_strings.indexOf(targetWord.word))
+      const topFiveTokens = response.map((element) => element.token_str)
+      const targetWordIndices = targetWords.map((targetWord) => topFiveTokens.indexOf(targetWord.word))
       const maxIndex = Math.max(...targetWordIndices)
       // console.log(token_strings)
       // console.log(targetWordIndices)
       // console.log(maxIndex)
 
+      // All targetWordIndices elements are -1 if no target word is within the top 5 machine guesses
       if (maxIndex >= 0) {
         const bestScoringTargetWordIndex = targetWordIndices.indexOf(maxIndex)
         const bestScoringTargetWord = targetWords[bestScoringTargetWordIndex]
@@ -119,14 +120,15 @@ export default function IndexPage() {
             {newSubmission.slice(token_index + mask_token.length)}
           </>
         )
-        setScore((previousScore) => previousScore + 5 - maxIndex)
+        const scoreEarned = Math.ceil(500 + 500 * response[topFiveTokens.indexOf(bestScoringTargetWord.word)].score)
+        setScore((previousScore) => previousScore + scoreEarned)
         setTargetWords((targetWords) => targetWords.filter((targetWord) => targetWord.id != bestScoringTargetWord.id))
         addBonusTime()
       } else {
         submissionObject.content = (
           <>
             {newSubmission.slice(0, token_index)}
-            <span className="incorrect-token">{token_strings[0]}</span>
+            <span className="incorrect-token">{topFiveTokens[0]}</span>
             {newSubmission.slice(token_index + mask_token.length)}
           </>
         )

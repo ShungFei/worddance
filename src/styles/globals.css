@@ -145,6 +145,10 @@ span.incorrect-token {
   align-items: center;
 }
 
+.left-panel>h2 {
+  margin-top: 1rem;
+}
+
 /* Input form */
 .form {
   grid-area: input;

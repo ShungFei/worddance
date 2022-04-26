@@ -21,10 +21,10 @@ export default function TutorialModal() {
     <dialog className="tutorial-modal" ref={modalRef}>
       <div className="tutorial-modal-wrapper" ref={modalWrapperRef}>
         <h1>Welcome to Word Dance</h1>
-        <p>Try to make the machine learning model fill in [MASK] with the words in the center</p>
+        <p>Try to make an AI fill in [MASK] with any word in the center.</p>
         <p>
-          If one of the words is within its 5 best guesses your score will increase from 1 to 5 points depending on its
-          ranking
+          If one of the words is within the AI's 5 best guesses you survive for 5 more seconds, and your score increases
+          based on how confident it was
         </p>
         <p>Give me a good show - dance with your words!</p>
       </div>
