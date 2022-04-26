@@ -8,7 +8,7 @@ const renderTime = ({remainingTime}) => {
   return <p className="word-timer-value">{remainingTime}</p>
 }
 
-export default function WordStackItem({id, targetWord, onWordExpiry}) {
+export default function WordStackItem({id, targetWord, onWordExpiry, isGameOver}) {
   const onComplete = () => {
     onWordExpiry(id)
   }
@@ -18,7 +18,7 @@ export default function WordStackItem({id, targetWord, onWordExpiry}) {
       {targetWord}
       <div className="word-timer-wrapper">
         <CountdownCircleTimer
-          isPlaying
+          isPlaying={!isGameOver}
           duration={30}
           colors={["#5fff65", "#a3daff", "#ffe9a7", "#ff7272"]}
           colorsTime={[30, 6, 3, 0]}

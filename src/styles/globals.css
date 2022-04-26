@@ -58,7 +58,7 @@ body {
   background-color: var(--bg-panel);
   border: var(--border);
   border-radius: var(--border-radius-panel);
-  overflow: hidden;
+  overflow: auto;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -95,7 +95,11 @@ span.incorrect-token {
   border: var(--border);
   overflow: auto;
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
+}
+
+.word-stack> :first-child {
+  margin-top: auto !important;
 }
 
 .word-stack-item {
@@ -107,7 +111,7 @@ span.incorrect-token {
 }
 
 .word-stack-item+.word-stack-item {
-  border-bottom: 2px solid var(--text-color);
+  border-top: 2px solid var(--text-color);
 }
 
 .word-timer-wrapper {
@@ -135,6 +139,12 @@ span.incorrect-token {
   align-items: center;
 }
 
+.timer-value {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 /* Input form */
 .form {
   grid-area: input;
@@ -156,7 +166,6 @@ span.incorrect-token {
 
 .text-area:focus {
   border: 2px solid var(--accent);
-  /* background-color: var(--bg-light); */
 }
 
 /* Tutorial modal */

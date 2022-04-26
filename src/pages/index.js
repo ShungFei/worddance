@@ -1,9 +1,12 @@
-import {useState, useEffect} from "react"
+import {useEffect, useState} from "react"
+import {CountdownCircleTimer} from "react-countdown-circle-timer"
 import InputForm from "../components/InputForm"
-import TutorialModal from "../components/TutorialModal"
 import Submission from "../components/Submission"
+import TutorialModal from "../components/TutorialModal"
 import WordStackItem from "../components/WordStackItem"
 import vocab from "../lib/vocab"
+
+let interval = null
 
 async function query(data) {
   const response = await fetch("https://api-inference.huggingface.co/models/bert-base-uncased", {
@@ -17,9 +20,15 @@ async function query(data) {
 
 export default function IndexPage() {
   const mask_token = "[MASK]"
+  const maximumTime = 120
+  const bonusTimeOnCorrectAnswer = 5
 
-  // const [gameTimer, setGameTimer] = useState(Date.now())
+  const [isGameOver, setIsGameOver] = useState(false)
   const [score, setScore] = useState(0)
+  const [correctAnswers, setCorrectAnswers] = useState(0)
+  const [timerKey, setTimerKey] = useState(0)
+  const [timerDuration, setTimerDuration] = useState(maximumTime)
+  const [startDate, setStartDate] = useState(Date.now)
   const [targetWords, setTargetWords] = useState([{id: vocab.indexOf("capital"), word: "capital"}])
   const [userSubmissions, setUserSubmissions] = useState([])
   const [newSubmission, setNewSubmission] = useState(`Paris is the ${mask_token} of France.`)
@@ -39,17 +48,38 @@ export default function IndexPage() {
   }
 
   useEffect(() => {
-    const interval = setInterval(() => addRandomTargetWord(), 5000)
-    return () => {
-      clearInterval(interval)
-    }
+    interval = setInterval(() => addRandomTargetWord(), 5000)
   }, [])
+
+  const restartGame = () => {
+    setStartDate(Date.now())
+    setCorrectAnswers(0)
+    setScore(0)
+    setTimerDuration(maximumTime)
+    setTargetWords([])
+  }
+
+  const gameOver = () => {
+    setIsGameOver(true)
+    clearInterval(interval)
+  }
+
+  const addBonusTime = () => {
+    const secondsSinceStart = (Date.now() - startDate) / 1000
+    setTimerDuration(
+      Math.min(maximumTime, maximumTime - secondsSinceStart + bonusTimeOnCorrectAnswer * (correctAnswers + 1))
+    )
+    setCorrectAnswers((prevCorrectAnswers) => prevCorrectAnswers + 1)
+
+    // Changing key of countdown timer rerenders with added time
+    setTimerKey((previousKey) => previousKey + 1)
+  }
 
   const userSubmitted = (event) => {
     event.preventDefault()
 
-    if (!newSubmission.includes(mask_token)) {
-      // Do not submit if input does not contain mask token
+    if (!newSubmission.includes(mask_token) || isGameOver) {
+      // Do not submit if input does not contain mask token or when game over
       return
     }
 
@@ -89,8 +119,9 @@ export default function IndexPage() {
             {newSubmission.slice(token_index + mask_token.length)}
           </>
         )
-        setScore(score + 5 - maxIndex)
-        setTargetWords(targetWords.filter((targetWord) => targetWord.id != bestScoringTargetWord.id))
+        setScore((previousScore) => previousScore + 5 - maxIndex)
+        setTargetWords((targetWords) => targetWords.filter((targetWord) => targetWord.id != bestScoringTargetWord.id))
+        addBonusTime()
       } else {
         submissionObject.content = (
           <>
@@ -107,7 +138,7 @@ export default function IndexPage() {
   }
 
   const handleWordExpiry = (id) => {
-    setTargetWords(targetWords.filter((word) => word.id != id))
+    setTargetWords((targetWords) => targetWords.filter((word) => word.id != id))
   }
 
   const handleInputChange = (event) => {
@@ -123,20 +154,56 @@ export default function IndexPage() {
     }
   }
 
+  const renderTime = ({remainingTime}) => {
+    if (remainingTime === 0) {
+      return (
+        <div className="timer-value">
+          <h2>Game over!</h2>
+          <p>Ctrl R to restart</p>
+        </div>
+      )
+    }
+    const minutes = Math.floor(remainingTime / 60)
+    const seconds = remainingTime % 60
+    return (
+      <div className="timer-value">
+        <h2>
+          {minutes}:{seconds.toLocaleString("en-US", {minimumIntegerDigits: 2, useGrouping: false})}
+        </h2>
+      </div>
+    )
+  }
+
   return (
     <div>
       <div className="container">
         <div className="left-panel">
-          <p>Score: {score}</p>
+          <CountdownCircleTimer
+            key={timerKey}
+            isPlaying
+            duration={maximumTime}
+            initialRemainingTime={timerDuration}
+            colors={["#5fff65", "#a3daff", "#ffe9a7", "#ff7272"]}
+            colorsTime={[30, 6, 3, 0]}
+            strokeWidth={32}
+            trailColor="var(--bg)"
+            size={256}
+            onComplete={gameOver}
+            strokeLinecap="butt"
+          >
+            {renderTime}
+          </CountdownCircleTimer>
+          <h2>Score: {score}</h2>
         </div>
 
         <div className="word-stack">
-          {targetWords.map((targetWord) => (
+          {[...targetWords].reverse().map((targetWord) => (
             <WordStackItem
               key={targetWord.id}
               id={targetWord.id}
               targetWord={targetWord.word}
               onWordExpiry={handleWordExpiry}
+              isGameOver={isGameOver}
             />
           ))}
         </div>
