@@ -23,15 +23,16 @@ export default function IndexPage() {
   const maximumTime = 120
   const bonusTimeOnCorrectAnswer = 5
 
-  const [isGameOver, setIsGameOver] = useState(false)
+  const [showTutorial, setShowTutorial] = useState(true)
+  const [isGameRunning, setIsGameRunning] = useState(false)
   const [score, setScore] = useState(0)
   const [correctAnswers, setCorrectAnswers] = useState(0)
   const [timerKey, setTimerKey] = useState(0)
   const [timerDuration, setTimerDuration] = useState(maximumTime)
   const [startDate, setStartDate] = useState(Date.now)
-  const [targets, setTargets] = useState([{id: vocab.indexOf("capital"), word: "capital"}])
+  const [targets, setTargets] = useState([])
   const [userSubmissions, setUserSubmissions] = useState([])
-  const [newSubmission, setNewSubmission] = useState(`Paris is the ${mask_token} of France.`)
+  const [newSubmission, setNewSubmission] = useState("")
 
   const addRandomTarget = () => {
     const wordsInPlay = targets.map((target) => target.word)
@@ -47,20 +48,30 @@ export default function IndexPage() {
     }
   }
 
-  useEffect(() => {
-    interval = setInterval(() => addRandomTarget(), 5000)
-  }, [])
+  const onModalClose = () => {
+    startGame()
+  }
 
-  const restartGame = () => {
+  const startGame = () => {
+    setIsGameRunning(true)
     setStartDate(Date.now())
     setCorrectAnswers(0)
     setScore(0)
     setTimerDuration(maximumTime)
-    setTargets([])
+
+    //
+    if (showTutorial) {
+      setTargets([{id: vocab.indexOf("capital"), word: "capital"}])
+      setNewSubmission(`Paris is the ${mask_token} of France.`)
+      setShowTutorial(!showTutorial)
+    } else {
+      setTargets([])
+    }
+    interval = setInterval(() => addRandomTarget(), 5000)
   }
 
   const gameOver = () => {
-    setIsGameOver(true)
+    setIsGameRunning(false)
     clearInterval(interval)
   }
 
@@ -78,7 +89,7 @@ export default function IndexPage() {
   const userSubmitted = (event) => {
     event.preventDefault()
 
-    if (!newSubmission.includes(mask_token) || isGameOver) {
+    if (!newSubmission.includes(mask_token) || !isGameRunning) {
       // Do not submit if input does not contain mask token or when game over
       return
     }
@@ -182,7 +193,7 @@ export default function IndexPage() {
         <div className="left-panel">
           <CountdownCircleTimer
             key={timerKey}
-            isPlaying
+            isPlaying={isGameRunning}
             duration={maximumTime}
             initialRemainingTime={timerDuration}
             colors={["#5fff65", "#a3daff", "#ffe9a7", "#ff7272"]}
@@ -205,7 +216,7 @@ export default function IndexPage() {
               id={target.id}
               targetWord={target.word}
               onWordExpiry={handleWordExpiry}
-              isGameOver={isGameOver}
+              isGameRunning={isGameRunning}
             />
           ))}
         </div>
@@ -218,7 +229,7 @@ export default function IndexPage() {
 
         <InputForm onSubmit={userSubmitted} onChange={handleInputChange} value={newSubmission} />
 
-        <TutorialModal />
+        <TutorialModal onModalClose={onModalClose} />
       </div>
     </div>
   )

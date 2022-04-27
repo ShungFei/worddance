@@ -1,6 +1,6 @@
 import {useRef, useEffect} from "react"
 
-export default function TutorialModal() {
+export default function TutorialModal({onModalClose}) {
   const modalRef = useRef(null)
   const modalWrapperRef = useRef(null)
 
@@ -18,7 +18,7 @@ export default function TutorialModal() {
   }, [])
 
   return (
-    <dialog className="tutorial-modal" ref={modalRef}>
+    <dialog className="tutorial-modal" ref={modalRef} onClose={onModalClose}>
       <div className="tutorial-modal-wrapper" ref={modalWrapperRef}>
         <h1>Welcome to Word Dance</h1>
         <p>Try to make an AI fill in [MASK] with any word in the center.</p>
