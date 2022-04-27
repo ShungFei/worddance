@@ -22,6 +22,7 @@ p {
   --text-color: hsl(0, 0%, 88%);
   --correct-color: hsl(131, 60%, 40%);
   --incorrect-color: hsl(0, 59%, 52%);
+  --feedback-score-color: hsl(131, 74%, 57%);
   --border: 0px solid #4c4c4c;
   --border-radius-panel: 1rem;
   --border-radius-item: 0.5rem;
@@ -42,23 +43,29 @@ body {
 .container {
   display: grid;
   grid-template-columns: 3fr 30ch 3fr;
-  grid-template-rows: auto 5rem;
+  grid-template-rows: auto 2rem 5rem;
   grid-template-areas:
-    "left  words submissions"
-    "input input input";
-  gap: 10vh 5vw;
+    "left  words    submissions"
+    "left  feedback submissions"
+    "input input    input";
+  gap: 1rem 5vw;
   margin: 5vh 3vw;
   width: 94vw;
   height: 90vh;
 }
 
 /* Submission stack */
-.submission-stack {
+.submission-stack-wrapper {
   grid-area: submissions;
+  display: flex;
+  flex-direction: column-reverse;
+  overflow: auto;
+}
+
+.submission-stack {
   background-color: var(--bg-panel);
   border: var(--border);
   border-radius: var(--border-radius-panel);
-  overflow: auto;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -170,6 +177,19 @@ span.incorrect-token {
 
 .text-area:focus {
   border: 2px solid var(--accent);
+}
+
+/* Feedback */
+.feedback {
+  grid-area: feedback;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.feedback-score {
+  color: var(--feedback-score-color);
+  font-weight: bold;
 }
 
 /* Tutorial modal */

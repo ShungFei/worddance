@@ -33,6 +33,7 @@ export default function IndexPage() {
   const [targets, setTargets] = useState([])
   const [userSubmissions, setUserSubmissions] = useState([])
   const [newSubmission, setNewSubmission] = useState("")
+  const [currentFeedback, setCurrentFeedback] = useState()
 
   const addRandomTarget = () => {
     const wordsInPlay = targets.map((target) => target.word)
@@ -133,6 +134,7 @@ export default function IndexPage() {
         )
         const scoreEarned = Math.ceil(500 + 500 * response[topFiveTokens.indexOf(bestScoringTarget.word)].score)
         setScore((previousScore) => previousScore + scoreEarned)
+        setCurrentFeedback(<span className="feedback-score">+{scoreEarned} points!</span>)
         setTargets((target) => target.filter((target) => target.id != bestScoringTarget.id))
         addBonusTime()
       } else {
@@ -221,11 +223,15 @@ export default function IndexPage() {
           ))}
         </div>
 
-        <div className="submission-stack">
-          {userSubmissions.map((submission) => (
-            <Submission key={submission.id} submission={submission} />
-          ))}
+        <div className="submission-stack-wrapper" style={{overflow: isGameRunning ? "hidden" : "auto"}}>
+          <div className="submission-stack">
+            {userSubmissions.map((submission) => (
+              <Submission key={submission.id} submission={submission} />
+            ))}
+          </div>
         </div>
+
+        <div className="feedback">{currentFeedback}</div>
 
         <InputForm onSubmit={userSubmitted} onChange={handleInputChange} value={newSubmission} />
 
