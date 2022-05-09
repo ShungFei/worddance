@@ -9,8 +9,7 @@ import vocab from "../lib/vocab"
 let interval = null
 
 async function query(data) {
-  const response = await fetch("https://api-inference.huggingface.co/models/bert-base-uncased", {
-    headers: {Authorization: "Bearer {API_TOKEN}"},
+  const response = await fetch("/api/bert", {
     method: "POST",
     body: JSON.stringify(data),
   })
